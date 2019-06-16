@@ -3,6 +3,7 @@
         <v-flex xs12>
             <photo-holder
                     :zones="zones"
+                    :photo="photo"
                     @zone-clicked="zoneClicked"
             ></photo-holder>
         </v-flex>
@@ -44,7 +45,7 @@
     import PhotoHolder from './PhotoHolder'
 
     export default {
-        name: "Shop",
+        name: "Ladle",
         components: {PhotoHolder},
         props: {
             name: {
@@ -54,6 +55,10 @@
             zones: {
                 type: Array,
                 default: () => [],
+            },
+            photo: {
+                type: String,
+                default: "",
             },
         },
         data() {

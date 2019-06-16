@@ -18,6 +18,9 @@
             return {
                 //
             }
+        },
+        beforeCreate() {
+            this.$store.dispatch('restoreFromLocalStorage')
         }
     }
 </script>

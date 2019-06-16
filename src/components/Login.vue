@@ -5,7 +5,7 @@
                 <v-layout>
                     <v-flex class="pa-5">
                         <p class="title text-xs-center mt-3 mb-2">Вход в систему</p>
-                        <v-form @submit.prevent="logIn">
+                        <v-form @submit.prevent="login">
                             <v-text-field
                                     label="Логин"
                                     v-model="username"
@@ -42,6 +42,14 @@
 
     export default {
         name: "Login",
+        data() {
+          return {
+              username: "",
+              password: "",
+              loading: false,
+              error: null,
+          }
+        },
         methods: {
             ...mapActions([
                 'setTokensInfo'
@@ -64,7 +72,7 @@
                     }
                 ).then(response => {
                     this.setTokensInfo(response.data).then(() => {
-                        this.$router.push({name: 'admin'})
+                        this.$router.push({name: 'main'})
                     });
                     this.loading = false;
                 }).catch(error => {

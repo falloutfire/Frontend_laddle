@@ -1,6 +1,6 @@
 <template>
     <v-layout id="layout" fill-height>
-        <canvas :id="id">
+        <canvas id="canvas">
         </canvas>
     </v-layout>
 </template>
@@ -18,6 +18,10 @@
                 type: Array,
                 default: () => [],
             },
+            photo: {
+                type: String,
+                default: "",
+            },
         },
         data() {
             return {
@@ -29,17 +33,10 @@
             }
         },
         methods: {
-            pnpoly(xp, yp, x, y) {
-                let c = false;
-                for (let i = 0, j = this.zones.length - 1; i < this.zones.length; j = i++) {
-                    if ((((yp[i] <= y) && (y < yp[j])) || ((yp[j] <= y) && (y < yp[i]))) &&
-                        (yp[j] - yp[i] !== 0 && x > (xp[j] - xp[i]) * (y - yp[i]) / (yp[j] - yp[i]) + xp[i]))
-                        c = !c;
-                }
-                return c;
-            },
             drawZones(x = -1, y = -1, clicked = false) {
                 const ctx = this.canvas.getContext('2d');
+                ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                ctx.drawImage(this.ladlePhoto, 0, 0);
                 this.zones.forEach(zone => {
                     const points = zone.points.slice();
                     const firstPoint = points.splice(0, 1);
@@ -74,36 +71,33 @@
             const layout = document.getElementById('layout');
             this.layout.height = layout.clientHeight;
             this.layout.width = layout.clientWidth;
-            this.canvas = document.getElementById(this.id);
-
-            const ctx = this.canvas.getContext('2d');
-            const image = new Image();
-            image.src = require('../assets/1.jpg');
-            image.onload = () => {
-                this.canvas.width = image.width;
-                this.canvas.height = image.height;
+            this.canvas = document.getElementById('canvas');
+            this.ladlePhoto.onload = () => {
+                this.canvas.width = this.photo.width;
+                this.canvas.height = this.photo.height;
                 const rect = this.canvas.getBoundingClientRect();
 
                 this.canvas.addEventListener('mousemove', (e) => {
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
-                    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                    ctx.drawImage(image, 0, 0);
                     this.drawZones(x, y);
                 });
 
                 this.canvas.addEventListener('mouseup', (e) => {
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
-                    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                    ctx.drawImage(image, 0, 0);
                     this.drawZones(x, y, true);
                 });
-
-                ctx.drawImage(image, 0, 0);
                 this.drawZones();
             };
-        }
+        },
+        computed: {
+            ladlePhoto() {
+                const image = new Image();
+                image.src = `data:image/jpeg;base64,${this.photo}`;
+                return image;
+            },
+        },
     }
 </script>
 

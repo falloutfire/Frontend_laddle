@@ -29,7 +29,6 @@ export const ladleDescription = {
         descriptionFieldType: 'textField',
         flexValues: {
             xs12: true,
-            sm6: true,
         },
         label: 'Name',
     },
@@ -38,6 +37,11 @@ export const ladleDescription = {
         flexValues: {
             xs12: true,
         },
+        showInTable: false,
+        label: 'Photo',
+    },
+    zones: {
+        descriptionFieldType: 'array',
         showInTable: false,
         label: 'Photo',
     },

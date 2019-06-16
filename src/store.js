@@ -47,6 +47,9 @@ export default new Vuex.Store({
     }
   },
   getters: {
+    isAdmin: state => {
+      return true;
+    },
     accessToken: state => {
       return state.accessToken;
     },

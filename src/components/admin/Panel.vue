@@ -1,9 +1,9 @@
 <template>
     <v-layout row wrap>
         <v-toolbar app>
-            <v-toolbar-title class="headline">
-                <span>Admin</span>
-            </v-toolbar-title>
+            <v-btn  color="secondary" :to="{name: 'main'}">
+                <span class="mr-2">Main</span>
+            </v-btn>
             <v-spacer></v-spacer>
             <v-btn>
                 <span class="mr-2">LOG OUT</span>
@@ -70,7 +70,7 @@
                     },
                     'ShopsTable': {
                         tableName: 'Shops',
-                        crudURL: 'shops',
+                        crudURL: 'bd/shop',
                         itemsDescription: lodash.cloneDeep(shopDescription),
                         defaultItem: lodash.cloneDeep(defaultShop),
                         filterName: 'name'
@@ -84,30 +84,23 @@
                     },
                     'ZonesTable': {
                         tableName: 'Zones',
-                        crudURL: 'zone',
+                        crudURL: 'bd/zone',
                         itemsDescription: lodash.cloneDeep(zoneDescription),
                         defaultItem: lodash.cloneDeep(defaultZone),
-                        filterName: 'type'
+                        filterName: 'name'
                     },
                     'RefractoriesTable': {
                         tableName: 'Refractories',
-                        crudURL: 'refractory',
+                        crudURL: 'bd/refractory',
                         itemsDescription: lodash.cloneDeep(refractoryDescription),
                         defaultItem: lodash.cloneDeep(defaultRefractory),
                         filterName: 'name'
                     },
                     'PropertiesTable': {
                         tableName: 'Properties',
-                        crudURL: 'property',
+                        crudURL: 'bd/property',
                         itemsDescription: lodash.cloneDeep(propertyDescription),
                         defaultItem: lodash.cloneDeep(defaultProperty),
-                        filterName: 'name'
-                    },
-                    'PointsTable': {
-                        tableName: 'Points',
-                        crudURL: 'point',
-                        itemsDescription: lodash.cloneDeep(pointDescription),
-                        defaultItem: lodash.cloneDeep(defaultPoint),
                         filterName: 'name'
                     },
                 },
@@ -135,10 +128,6 @@
                     {
                         title: 'Properties',
                         table: 'PropertiesTable',
-                    },
-                    {
-                        title: 'Points',
-                        table: 'PointsTable',
                     },
 
                 ],

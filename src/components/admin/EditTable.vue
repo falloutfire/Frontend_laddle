@@ -49,8 +49,12 @@
                             ></v-checkbox>
                             <template v-if="descr['descriptionFieldType'] === 'photoField'">
                                 <v-layout row wrap justify-center align-center>
-                                    <v-flex xs2><h4>Photo</h4></v-flex>
                                     <v-flex xs6>
+<!--                                        <v-btn type="image" color="primary" dark class="mb-2" @click="choosePhoto">Выбрать фото-->
+<!--                                        </v-btn>-->
+                                        <input type="file" @change="choosePhoto(value, key)" id="fileInput"/>
+                                    </v-flex>
+                                    <v-flex xs6 v-if="value[key]">
                                         <v-btn color="primary" dark class="mb-2" @click="openDialog">Редактировать зоны
                                         </v-btn>
                                     </v-flex>
@@ -70,7 +74,8 @@
                                     <v-card>
                                         <zone-editor
                                                 @close="dialog = false"
-                                                v-model="value"
+                                                :value="value"
+                                                @input="zoneEditorInput"
                                         ></zone-editor>
                                     </v-card>
                                 </v-dialog>
@@ -91,6 +96,7 @@
 
 <script>
     import HTTP from "@/http";
+    import lodash from 'lodash';
     import ZoneEditor from "./ZoneEditor";
 
     export default {
@@ -113,6 +119,24 @@
             console.log(this.value);
         },
         methods: {
+            zoneEditorInput(value) {
+              const newValue = lodash.cloneDeep(this.value);
+              newValue.zones = value.zones.slice();
+              this.$emit('input', newValue);
+            },
+            choosePhoto(value, key) {
+                const reader = new FileReader();
+                reader.readAsBinaryString(document.getElementById('fileInput').files[0]);
+
+                reader.onload = () => {
+                    const newValue = lodash.cloneDeep(value);
+                    newValue[key] = btoa(reader.result);
+                    this.$emit('input', newValue);
+                };
+                reader.onerror = function() {
+                    console.log('there are some problems');
+                };
+            },
             openDialog() {
                 this.dialog = true;
             },

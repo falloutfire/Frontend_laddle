@@ -1,24 +1,24 @@
 <template>
     <v-layout id="layout" fill-height row justify-center>
 
-        <v-toolbar absolute dark color="primary">
-            <v-btn icon dark @click.native="$emit('close')">
-                <v-icon>close</v-icon>
-            </v-btn>
-            <v-toolbar-title>Редактирование зон</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn v-if="!currentZone" color="secondary" @click="addZone">Add zone</v-btn>
-            <v-btn v-if="currentZone && currentZone.points.length > 2" color="secondary" @click="saveCurrentZone">Save
-                zone
-            </v-btn>
-            <v-btn v-if="currentZone" color="secondary" @click="removeCurrentZone">Cancel</v-btn>
-            <v-spacer></v-spacer>
-            <v-btn v-if="changes.length > 0" @click="saveChanges">Save changes</v-btn>
-        </v-toolbar>
+            <v-toolbar absolute dark color="primary">
+                <v-btn icon dark @click.native="$emit('close')">
+                    <v-icon>close</v-icon>
+                </v-btn>
+                <v-toolbar-title>Редактирование зон</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn v-if="!currentZone" color="secondary" @click="addZone">Add zone</v-btn>
+                <v-btn v-if="currentZone && currentZone.points.length > 2" color="secondary" @click="saveCurrentZone">
+                    Save
+                    zone
+                </v-btn>
+                <v-btn v-if="currentZone" color="secondary" @click="removeCurrentZone">Cancel</v-btn>
+                <v-spacer></v-spacer>
+                <v-btn v-if="changes.length > 0" @click="saveChanges">Save changes</v-btn>
+            </v-toolbar>
 
-
-        <v-flex xs9>
-            <canvas id="canvas">
+        <v-flex xs9 class="mt-5">
+            <canvas id="canvas" class="mt-4">
             </canvas>
         </v-flex>
 
@@ -42,7 +42,7 @@
                     <template v-slot:header>
                         <v-text-field
                                 :value="zone.name"
-                                label="x"
+                                label="name"
                                 @input="handleZoneNameInput(zoneIndex, $event)"
                         ></v-text-field>
                     </template>
@@ -181,6 +181,11 @@
             },
             saveChanges() {
                 //TODO BATCH REQUEST (FILTER AND ARRAY PAYLOAD)
+                //editPoint
+                //deleteZone
+                //deletePoint
+                //changeZoneName
+                //addZone
                 this.changes.forEach(({changeType, value}) => {
                     switch (changeType) {
                         case 'deleteZone': {
@@ -196,7 +201,10 @@
                         }
                     }
                 });
-                this.changes.splice(0, this.change.length);
+                this.changes.splice(0, this.changes.length);
+                const newValue = lodash.cloneDeep(this.value);
+                newValue.zones = this.zones.slice();
+                this.$emit('input', newValue);
             },
             handlePointInput(coordinateName, zoneIndex, pointIndex, value) {
                 if (this.currentZone && zoneIndex + 1 === this.zones.length) {

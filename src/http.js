@@ -1,18 +1,19 @@
 import axios from 'axios';
+import router from './router';
 import store from './store';
 
 const HTTP = axios.create({
-    //baseURL: "https://laddle.herokuapp.com/",
-    baseURL: "http://127.0.0.1:5000"
+    baseURL: "https://laddle.herokuapp.com/",
+    //baseURL: "http://127.0.0.1:5000"
 });
 
-// HTTP.interceptors.request.use(config => {
-//     // Используется для подстановки токена аутентификации в каждый запрос
-//     if (config.url.indexOf('oauth/token') === -1) {
-//         config.url += `?access_token=${store.getters.accessToken}`;
-//     }
-//     return config
-// });
+HTTP.interceptors.request.use(config => {
+    // Используется для подстановки токена аутентификации в каждый запрос
+    if (config.url.indexOf('oauth/token') === -1) {
+        config.url += `?access_token=${store.getters.accessToken}`;
+    }
+    return config
+});
 
 HTTP.interceptors.response.use(response => {
     return response

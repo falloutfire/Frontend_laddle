@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import store from './store';
 import Main from './components/Main';
 
 Vue.use(Router);
@@ -18,7 +19,6 @@ const router = new Router({
             path: '/admin',
             name: 'admin',
             component: () => import(/* webpackChunkName: "about" */ './components/admin/Panel.vue'),
-            meta: { notRequiresAuth: true },
         },
         {
             path: '/',
@@ -28,12 +28,10 @@ const router = new Router({
     ]
 });
 
-let a = false;
-
 router.beforeEach((to, from, next) => {
     if (!to.matched.some(record => record.meta.notRequiresAuth)) {
         Vue.nextTick(()=>{
-            if (a) {
+            if (!store.state.accessToken)  {
                 next({
                     path: '/login'
                 })
