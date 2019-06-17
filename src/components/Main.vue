@@ -5,7 +5,7 @@
                 <span class="mr-2">Admin Panel</span>
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn color="secondary">
+            <v-btn @click="$store.dispatch('clearTokens').then(() => $router.push({name: 'login'}))" color="secondary">
                 <span class="mr-2">LOG OUT</span>
             </v-btn>
         </v-toolbar>

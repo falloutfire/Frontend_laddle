@@ -4,7 +4,7 @@ import store from './store';
 
 const HTTP = axios.create({
     baseURL: "https://laddle.herokuapp.com/",
-    //baseURL: "http://127.0.0.1:5000"
+    //baseURL: "http://127.0.0.1:8080"
 });
 
 HTTP.interceptors.request.use(config => {

@@ -1,21 +1,21 @@
 <template>
     <v-layout id="layout" fill-height row justify-center>
 
-            <v-toolbar absolute dark color="primary">
-                <v-btn icon dark @click.native="$emit('close')">
-                    <v-icon>close</v-icon>
-                </v-btn>
-                <v-toolbar-title>Редактирование зон</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn v-if="!currentZone" color="secondary" @click="addZone">Add zone</v-btn>
-                <v-btn v-if="currentZone && currentZone.points.length > 2" color="secondary" @click="saveCurrentZone">
-                    Save
-                    zone
-                </v-btn>
-                <v-btn v-if="currentZone" color="secondary" @click="removeCurrentZone">Cancel</v-btn>
-                <v-spacer></v-spacer>
-                <v-btn v-if="changes.length > 0" @click="saveChanges">Save changes</v-btn>
-            </v-toolbar>
+        <v-toolbar absolute dark color="primary">
+            <v-btn icon dark @click.native="$emit('close')">
+                <v-icon>close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Редактирование зон</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn v-if="!currentZone" color="secondary" @click="addZone">Add zone</v-btn>
+            <v-btn v-if="currentZone && currentZone.points.length > 2" color="secondary" @click="saveCurrentZone">
+                Save
+                zone
+            </v-btn>
+            <v-btn v-if="currentZone" color="secondary" @click="removeCurrentZone">Cancel</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn v-if="changes.length > 0" @click="saveChanges">Save changes</v-btn>
+        </v-toolbar>
 
         <v-flex xs9 class="mt-5">
             <canvas id="canvas" class="mt-4">
@@ -38,6 +38,13 @@
                         >
                             <v-icon color="primary">delete</v-icon>
                         </v-btn>
+                        <!--                        <v-btn-->
+                        <!--                                icon-->
+                        <!--                                v-if="!(currentZone && zoneIndex + 1 === zones.length)"-->
+                        <!--                                @click="handleEditZone(zoneIndex)"-->
+                        <!--                        >-->
+                        <!--                            <v-icon color="primary">edit</v-icon>-->
+                        <!--                        </v-btn>-->
                     </template>
                     <template v-slot:header>
                         <v-text-field
@@ -53,7 +60,6 @@
                                         :key="pointIndex"
                                         avatar
                                 >
-
                                     <v-list-tile-content>
                                         <v-layout row wrap>
                                             <v-flex xs5>
@@ -84,6 +90,56 @@
                             </template>
                         </v-list>
                     </v-card>
+                    <v-card>
+                        <v-card-title>Огнеупоры</v-card-title>
+                        <v-card-media>
+                            <template v-for="(refractory, refractoryIndex) in zone.refractories">
+                                <v-layout :key="refractoryIndex" row wrap>
+                                    <v-flex xs12>
+                                        <v-text-field
+                                                v-model="refractory.name"
+                                        ></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <template v-for="(property, propertyIndex) in refractory.properties">
+                                            <v-card :key="propertyIndex">
+                                                <v-card-title>Свойства</v-card-title>
+                                                <v-card-media>
+                                                    <v-layout row wrap justify-center>
+                                                        <v-flex xs6>
+                                                            <v-text-field
+                                                                    v-model="property.name"
+                                                            ></v-text-field>
+                                                        </v-flex>
+                                                        <v-flex xs6>
+                                                            <v-text-field
+                                                                    v-model="property.value"
+                                                            ></v-text-field>
+                                                        </v-flex>
+                                                    </v-layout>
+                                                </v-card-media>
+                                            </v-card>
+                                        </template>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <v-btn
+                                                block
+                                                color="primary"
+                                                :key="refractoryIndex"
+                                                @click="addProperty(zoneIndex, refractoryIndex)"
+                                        >Добавить свойство
+                                        </v-btn>
+                                    </v-flex>
+                                </v-layout>
+                            </template>
+                            <v-btn
+                                    block
+                                    color="primary"
+                                    @click="addRefractory(zoneIndex)"
+                            >Добавить огнеупор
+                            </v-btn>
+                        </v-card-media>
+                    </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </v-flex>
@@ -98,6 +154,7 @@
     const newZoneDefault = {
         name: "new zone",
         points: [],
+        refractories: [],
     };
 
     export default {
@@ -130,6 +187,35 @@
             }
         },
         methods: {
+            addProperty(zoneIndex, refractoryIndex) {
+                if (this.currentZone && zoneIndex + 1 === this.zones.length) {
+                    this.currentZone.refractories[refractoryIndex].properties.push({
+                        name: "",
+                        value: "",
+                        type: ""
+                    })
+                } else {
+                    this.currentZones[zoneIndex].refractories[refractoryIndex].properties.push({
+                        name: "",
+                        value: "",
+                        type: ""
+                    })
+                }
+            },
+            addRefractory(zoneIndex) {
+                console.log(zoneIndex);
+                if (this.currentZone && zoneIndex + 1 === this.zones.length) {
+                    this.currentZone.refractories.push({
+                        name: "",
+                        properties: [],
+                    })
+                } else {
+                    this.currentZones[zoneIndex].refractories.push({
+                        name: "",
+                        properties: [],
+                    })
+                }
+            },
             drawZones(x = -1, y = -1, clicked = false) {
                 const ctx = this.canvas.getContext('2d');
                 ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);

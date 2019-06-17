@@ -5,7 +5,7 @@
                 <span class="mr-2">Main</span>
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn>
+            <v-btn @click="$store.dispatch('clearTokens').then(() => $router.push({name: 'login'}))" color="secondary">
                 <span class="mr-2">LOG OUT</span>
             </v-btn>
         </v-toolbar>
@@ -38,7 +38,6 @@
 </template>
 
 <script>
-    // import HelloWorld from './components/HelloWorld'
     import CrudTable from '@/components/admin/CrudTable'
     import lodash from 'lodash';
 
@@ -47,7 +46,6 @@
     import {defaultShop, shopDescription} from "@/models/shops";
     import {refractoryDescription, defaultRefractory} from "@/models/refractories";
     import {defaultProperty, propertyDescription} from "@/models/properties";
-    import {defaultPoint, pointDescription} from "@/models/points";
     import {defaultLadle, ladleDescription} from "@/models/ladles";
 
 

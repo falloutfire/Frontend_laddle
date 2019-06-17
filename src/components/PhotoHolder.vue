@@ -6,6 +6,7 @@
 </template>
 
 <script>
+    import lodash from 'lodash';
 
     export default {
         name: "PhotoHolder",
@@ -39,7 +40,7 @@
                 ctx.drawImage(this.ladlePhoto, 0, 0);
                 this.zones.forEach(zone => {
                     const points = zone.points.slice();
-                    const firstPoint = points.splice(0, 1);
+                    const [firstPoint] = points.slice(0, 1);
                     if (firstPoint) {
                         ctx.beginPath();
                         ctx.moveTo(firstPoint.x, firstPoint.y);
@@ -72,12 +73,14 @@
             this.layout.height = layout.clientHeight;
             this.layout.width = layout.clientWidth;
             this.canvas = document.getElementById('canvas');
+            //const debouncedDrawZones = lodash.debounce(this.drawZones, .750);
             this.ladlePhoto.onload = () => {
-                this.canvas.width = this.photo.width;
-                this.canvas.height = this.photo.height;
+                this.canvas.width = this.ladlePhoto.width;
+                this.canvas.height = this.ladlePhoto.height;
                 const rect = this.canvas.getBoundingClientRect();
 
                 this.canvas.addEventListener('mousemove', (e) => {
+                    console.log(e);
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
                     this.drawZones(x, y);
