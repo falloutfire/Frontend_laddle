@@ -1,10 +1,10 @@
 import axios from 'axios';
 import router from './router';
-import store from './store';
+import {store} from './store';
 
 const HTTP = axios.create({
-    baseURL: "https://laddle.herokuapp.com/",
-    //baseURL: "http://127.0.0.1:8080"
+    //baseURL: "https://laddle.herokuapp.com/",
+    baseURL: "http://127.0.0.1:8080"
 });
 
 HTTP.interceptors.request.use(config => {
@@ -25,7 +25,7 @@ HTTP.interceptors.response.use(response => {
     // Используется для авто-обновления токенов по истечению
     if (error.request.responseURL.indexOf('oauth/token') === -1 && error.request.status === 401) {
         console.debug('Check auth error, try auto-refresh');
-        if (store.state.refreshToken) {
+        if (store.state.tokenStore.refreshToken) {
             const formData = new FormData();
             formData.set('grant_type', 'refresh_token');
             formData.set('refresh_token', store.getters.refreshToken);

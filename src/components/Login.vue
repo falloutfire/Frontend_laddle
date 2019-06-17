@@ -5,7 +5,7 @@
                 <v-layout>
                     <v-flex class="pa-5">
                         <p class="title text-xs-center mt-3 mb-2">Вход в систему</p>
-                        <v-form @submit.prevent="login">
+<!--                        <v-form >-->
                             <v-text-field
                                     label="Логин"
                                     v-model="username"
@@ -25,7 +25,7 @@
                                     dark
                                     @click="login"
                             >Войти</v-btn>
-                        </v-form>
+<!--                        </v-form>-->
                         <v-alert type="error" outline :value="error">
                             Неверные данные для входа
                         </v-alert>
@@ -58,6 +58,7 @@
                 return 'YXBwX2NsaWVudDphcHBfYmFzZV9zZWNyZXQ='//btoa('mobile_app_client.mobile_app_password');
             },
             login() {
+                console.log(123123123);
                 this.loading = true;
                 const formData = new FormData();
                 formData.set('username', this.username);

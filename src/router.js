@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import store from './store';
+import {store} from './store';
 import Main from './components/Main';
 
 Vue.use(Router);
@@ -31,7 +31,8 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     if (!to.matched.some(record => record.meta.notRequiresAuth)) {
         Vue.nextTick(()=>{
-            if (!store.state.accessToken)  {
+            if (!store.state.tokenStore.accessToken)  {
+                console.log()
                 next({
                     path: '/login'
                 })
