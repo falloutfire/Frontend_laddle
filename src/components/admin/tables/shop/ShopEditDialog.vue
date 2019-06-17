@@ -8,31 +8,22 @@
             <v-card-text>
                 <v-container grid-list-md>
                     <v-layout wrap>
-                        <v-text-field
-                                label="Логин"
-                                v-model="value.shopId"
-                        ></v-text-field>
-                        <v-text-field
-                                label="Логин"
-                                v-model="value.login"
-                        ></v-text-field>
-                        <v-text-field
-                                label="Логин"
-                                v-model="value.firstName"
-                        ></v-text-field>
-                        <v-text-field
-                                label="Логин"
-                                v-model="value.secondName"
-                        ></v-text-field>
-                        <v-text-field
-                                label="Логин"
-                                v-model="value.middleName"
-                        ></v-text-field>
+                        <v-flex xs12 sm6>
+                            <v-text-field
+                                    v-model="value.name"
+                                    label="Название"
+                            ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 sm6>
+                            <v-text-field
+                                    v-model="value.employeesNumber"
+                                    type="number"
+                                    label="Количнство сотрудников"
+                            ></v-text-field>
+                        </v-flex>
 
 
-
-
-                                            </v-layout>
+                    </v-layout>
                 </v-container>
             </v-card-text>
 
@@ -46,11 +37,10 @@
 </template>
 
 <script>
-    import HTTP from "@/http";
-    import lodash from 'lodash';
+    import {mapGetters} from 'vuex';
 
     export default {
-        name: "UserEditDialog",
+        name: "ShopEditDialog",
         props: {
             value: Object,
             fieldsDescription: Object,
@@ -64,55 +54,16 @@
                 dialog: false,
             }
         },
-        mounted() {
-            console.log(this.value);
-        },
         methods: {
-            zoneEditorInput(value) {
-                const newValue = lodash.cloneDeep(this.value);
-                newValue.zones = value.zones.slice();
-                this.$emit('input', newValue);
-            },
-            choosePhoto(value, key) {
-                const reader = new FileReader();
-                reader.readAsBinaryString(document.getElementById('fileInput').files[0]);
-
-                reader.onload = () => {
-                    const newValue = lodash.cloneDeep(value);
-                    newValue[key] = btoa(reader.result);
-                    this.$emit('input', newValue);
-                };
-                reader.onerror = function() {
-                    console.log('there are some problems');
-                };
-            },
             openDialog() {
                 this.dialog = true;
             },
-            getV(src) {
-                return `data:image/jpeg;base64,${src}`;
-            },
-            async retrieveSelectable(fields) {
-                fields.filter(([, descr]) => {
-                    return descr['descriptionFieldType'] === 'selectField';
-                }).forEach(([key, descr]) => {
-                    HTTP.get(descr['urlToGetSelectables']).then(response => {
-                        this.items[key] = response.data.result
-                    })
-                })
-            },
         },
         computed: {
-            fields() {
-                const fields = Object.entries(this.fieldsDescription).filter(([, descr]) => {
-                    return descr['editableField'] !== undefined ? descr['editableField'] : true;
-                });
-                fields.forEach(([key,]) => {
-                    this.items[key] = [];
-                });
-                this.retrieveSelectable(fields);
-                return fields;
-            },
+            ...mapGetters([
+                'shops',
+                'shopsFetching',
+            ])
         },
     }
 </script>

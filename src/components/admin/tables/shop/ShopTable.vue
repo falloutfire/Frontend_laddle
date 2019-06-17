@@ -2,7 +2,7 @@
     <v-layout row wrap>
         <v-flex xs12 class="mt-3" style="border: 1px solid gray">
             <v-toolbar flat color="white">
-                <v-toolbar-title>User</v-toolbar-title>
+                <v-toolbar-title>Shop</v-toolbar-title>
                 <v-divider
                         class="mx-2"
                         inset
@@ -14,41 +14,38 @@
                                   label="Фильтр по имени пользователя" clearable></v-text-field>
                 </v-flex>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" dark class="mb-2" @click="createDialog = true">New user</v-btn>
+                <v-btn color="primary" dark class="mb-2" @click="openCreateShopDialog">Новый цех</v-btn>
                 <v-dialog v-model="deleteDialog" max-width="500px">
                     <v-card>
                         <v-card-title>
                             <v-layout row wrap justify-center>
-                                <span class="headline ">Are you sure to delete user?</span>
+                                <span class="headline ">Are you sure to delete shop?</span>
                             </v-layout>
                         </v-card-title>
                         <v-card-actions>
                             <v-layout row wrap justify-center>
                                 <v-btn color="blue darken-1" flat @click="closeDeleteDialog">Cancel</v-btn>
-                                <v-btn color="blue darken-1" flat @click="sureDelete">Delete</v-btn>
+                                <v-btn color="blue darken-1" :loading="deleteLoading" flat @click="sureDelete">Delete</v-btn>
                             </v-layout>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
 
-                <!--                <edit-dialog-->
-                <!--                        :itemName="tableName"-->
-                <!--                        :isOpen="editDialog"-->
-                <!--                        v-model="editedItem"-->
-                <!--                        :fieldsDescription="itemsDescription"-->
-                <!--                        @close="editDialog = $event"-->
-                <!--                        @apply="edit"-->
-                <!--                ></edit-dialog>-->
+                <shop-edit-dialog
+                        v-model="currentShopToCreate"
+                        :is-open="createDialog"
+                        :save-loading="createLoading"
+                        @close="createDialog = false"
+                        @apply="save"
+                ></shop-edit-dialog>
 
-                <!--                <edit-dialog-->
-                <!--                        :itemName="tableName"-->
-                <!--                        :isOpen="createDialog"-->
-                <!--                        v-model="createdItem"-->
-                <!--                        :fieldsDescription="itemsDescription"-->
-                <!--                        :saveLoading="createLoading"-->
-                <!--                        @close="createDialog = $event"-->
-                <!--                        @apply="save"-->
-                <!--                ></edit-dialog>-->
+                <shop-edit-dialog
+                        v-model="currentShopToEdit"
+                        :is-open="editDialog"
+                        :save-loading="editLoading"
+                        @close="editDialog = false"
+                        @apply="edit"
+                ></shop-edit-dialog>
 
             </v-toolbar>
             <v-snackbar
@@ -63,28 +60,25 @@
         <v-flex xs12>
             <v-data-table
                     :headers="headers"
-                    :items="filteredUsers"
-                    :loading="usersFetching"
+                    :items="filteredShops"
+                    :loading="shopsFetching"
                     class="elevation-1"
             >
                 <template v-slot:items="props">
                     <td>{{ props.item.id }}</td>
-                    <td>{{ props.item.shopId }}</td>
-                    <td>{{ props.item.login }}</td>
-                    <td>{{ props.item.firstName }}</td>
-                    <td>{{ props.item.secondName }}</td>
-                    <td>{{ props.item.middleName }}</td>
+                    <td>{{ props.item.name }}</td>
+                    <td>{{ props.item.employeesNumber }}</td>
                     <td class="justify-center layout px-0">
                         <v-icon
                                 small
                                 class="mr-2"
-                                @click="editItem(props.item)"
+                                @click="openEditShopDialog(props.item)"
                         >
                             edit
                         </v-icon>
                         <v-icon
                                 small
-                                @click="deleteItem(props.item)"
+                                @click="openDeleteShopDialog(props.item)"
                         >
                             delete
                         </v-icon>
@@ -97,23 +91,30 @@
 
 <script>
     import {mapActions, mapGetters} from 'vuex';
-    import UserEditDialog from './ShopEditDialog';
+    import ShopEditDialog from './ShopEditDialog';
     import lodash from 'lodash';
 
+    const shopDefault = {
+        id: "",
+        name: "",
+        employeesNumber: "",
+    };
+
     export default {
-        name: "UserTable",
-        components: {UserEditDialog},
+        name: "ShopTable",
+        components: {ShopEditDialog},
         data() {
             return {
                 search: "",
                 headers: [
-                    {text: 'id', value: 'id'},
-                    {text: 'Цех id', value: 'shopId'},
-                    {text: 'Имя пользователя', value: 'login'},
-                    {text: 'Имя', value: 'firstName'},
-                    {text: 'Фамилия', value: 'secondName'},
-                    {text: 'Отчество', value: 'middleName'}
+                    {text: 'Цех id', value: 'id'},
+                    {text: 'Название', value: 'name'},
+                    {text: 'Количество сотрудников', value: 'employeesNumber'},
                 ],
+
+                currentShopToCreate: lodash.cloneDeep(shopDefault),
+                currentShopToEdit: lodash.cloneDeep(shopDefault),
+                currentShopToDelete: lodash.cloneDeep(shopDefault),
 
                 snackbar: false,
                 snackbarText: '',
@@ -122,34 +123,33 @@
                 itemsLoading: false,
                 items: [],
 
-                editDialog: false,
                 createDialog: false,
+                editDialog: false,
                 deleteDialog: false,
 
                 createLoading: false,
                 editLoading: false,
                 deleteLoading: false,
-
-                deletedItem: this.defaultItem,
-                editedItem: this.defaultItem,
-                createdItem: this.defaultItem,
             }
         },
         computed: {
             ...mapGetters([
-                'users',
-                'usersFetching',
+                'shops',
+                'shopsFetching',
             ]),
-            filteredUsers() {
-                return this.users
+            filteredShops() {
+                return this.shops
             },
         },
         methods: {
             ...mapActions([
-                'updateUsers'
+                'updateShops',
+                'saveShop',
+                'editShop',
+                'deleteShop',
             ]),
             success() {
-                this.updateUsers();
+                this.updateShops();
                 this.snackbarText = 'success';
                 this.snackbar = true;
                 this.snackbarColor = 'success';
@@ -163,30 +163,56 @@
                 this.deletedItem = null;
                 this.deleteDialog = false;
             },
-            closeDialog() {
-                this.editedItem = lodash.cloneDeep(this.defaultItem);
-                this.editDialog = false;
-            },
             edit() {
                 this.editLoading = true;
+                this.editShop(this.currentShopToEdit).then(() => {
+                    this.editLoading = false;
+                    this.currentShopToEdit = lodash.cloneDeep(shopDefault);
+                    this.success();
+                    this.editDialog = false;
+                }).catch(error => {
+                    this.editLoading = false;
+                    this.error(error)
+                });
             },
             save() {
                 this.createLoading = true;
+                this.saveShop(this.currentShopToCreate).then(() => {
+                    this.createLoading = false;
+                    this.currentShopToCreate = lodash.cloneDeep(shopDefault);
+                    this.success();
+                    this.createDialog = false;
+                }).catch(error => {
+                    this.createLoading = false;
+                    this.error(error)
+                })
             },
-            editItem(item) {
-                this.editedItem = item;
+            openCreateShopDialog() {
+                this.createDialog = true;
+            },
+            openEditShopDialog(item) {
+                this.currentShopToEdit = lodash.cloneDeep(item);
                 this.editDialog = true;
             },
-            deleteItem(item) {
-                this.deletedItem = item;
+            openDeleteShopDialog(item) {
+                this.currentShopToDelete = lodash.cloneDeep(item);
                 this.deleteDialog = true;
             },
-            sureDelete: function () {
+            sureDelete() {
                 this.deleteLoading = true;
+                this.deleteShop(this.currentShopToDelete).then(() => {
+                    this.deleteLoading = false;
+                    this.currentShopToDelete = lodash.cloneDeep(shopDefault);
+                    this.success();
+                    this.deleteDialog = false;
+                }).catch(error => {
+                    this.deleteLoading = false;
+                    this.error(error)
+                })
             },
         },
         mounted() {
-            this.updateUsers();
+            this.updateShops();
         }
     }
 </script>

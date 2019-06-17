@@ -10,7 +10,7 @@ export default {
             state.shops = shops;
         },
         setShopsFetching(state, value) {
-          state.shopsFetching = value
+            state.shopsFetching = value
         },
     },
     actions: {
@@ -22,6 +22,21 @@ export default {
             }).catch(() => {
                 commit('setShopsFetching', false);
             })
+        },
+        saveShop({dispatch}, shop) {
+            return HTTP.post('/bd/shops', shop).then(() => {
+                dispatch('updateShops')
+            })
+        },
+        editShop({dispatch}, shop) {
+            return HTTP.put('/bd/shops', shop).then(() => {
+                dispatch('updateShops')
+            })
+        },
+        deleteShop({dispatch}, shop) {
+          return HTTP.delete(`/bd/shops/${shop.id}`).then(() => {
+              dispatch('updateShops')
+          })
         },
     },
     getters: {
