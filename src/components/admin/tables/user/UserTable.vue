@@ -66,7 +66,7 @@
             >
                 <template v-slot:items="props">
                     <td>{{ props.item.id }}</td>
-                    <td>{{ props.item.shopId }}</td>
+                    <td>{{ props.item.shop.id }}</td>
                     <td>{{ props.item.login }}</td>
                     <td>{{ props.item.firstName }}</td>
                     <td>{{ props.item.secondName }}</td>
@@ -118,7 +118,7 @@
                 search: "",
                 headers: [
                     {text: 'id', value: 'id'},
-                    {text: 'Цех id', value: 'shopId'},
+                    {text: 'Цех id', value: 'shop.id'},
                     {text: 'Имя пользователя', value: 'login'},
                     {text: 'Имя', value: 'firstName'},
                     {text: 'Фамилия', value: 'secondName'},
