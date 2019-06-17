@@ -36,11 +36,13 @@
 
 <script>
     import UserTable from './tables/user/UserTable';
+    import ShopTable from './tables/shop/ShopTable';
 
     export default {
         name: 'Panel',
         components: {
-            UserTable
+            UserTable,
+            ShopTable,
         },
         data() {
             return {
@@ -53,7 +55,7 @@
                     },
                     {
                         title: 'Shops',
-                        table: 'ShopsTable',
+                        table: 'ShopTable',
                     },
                     {
                         title: 'Ladles',
