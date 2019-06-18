@@ -11,7 +11,7 @@
                 <v-flex xs12 sm3>
                     <v-text-field class="ml-3 mt-2"
                                   v-model="search"
-                                  label="Фильтр по имени пользователя" clearable></v-text-field>
+                                  label="Фильтр по названию зоны" clearable></v-text-field>
                 </v-flex>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" dark class="mb-2" @click="openCreateZoneDialog">Новая зона</v-btn>
