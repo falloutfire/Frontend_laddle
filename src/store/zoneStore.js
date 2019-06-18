@@ -29,12 +29,12 @@ export default {
             })
         },
         editZone({dispatch}, zone) {
-            return HTTP.put('/bd/zones', zone).then(() => {
+            return HTTP.put(`/zones/${zone.id}`, zone).then(() => {
                 dispatch('updateZones')
             })
         },
         deleteZone({dispatch}, zone) {
-          return HTTP.delete(`/bd/zones/${zone.id}`).then(() => {
+          return HTTP.delete(`/zones/${zone.id}`).then(() => {
               dispatch('updateZones')
           })
         },

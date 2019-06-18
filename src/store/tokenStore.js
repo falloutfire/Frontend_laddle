@@ -1,3 +1,5 @@
+import HTTP from '../http';
+
 export default {
     state: {
         accessToken: null,
@@ -16,6 +18,9 @@ export default {
         },
     },
     actions: {
+        logout({dispatch}) {
+            dispatch('clearTokens')
+        },
         clearTokens({commit}) {
             commit('setAccessToken', null);
             commit('setRefreshToken', null);

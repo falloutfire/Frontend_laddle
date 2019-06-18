@@ -5,7 +5,7 @@
                 <span class="mr-2">Admin Panel</span>
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn @click="$store.dispatch('clearTokens').then(() => $router.push({name: 'login'}))" color="secondary">
+            <v-btn @click="logout().then(() => $router.push({name: 'login'}))" color="secondary">
                 <span class="mr-2">LOG OUT</span>
             </v-btn>
         </v-toolbar>
@@ -52,25 +52,31 @@
 
 <script>
     import Ladle from './Ladle';
-    import HTTP from '../http';
+    import {mapActions, mapGetters} from 'vuex';
 
     export default {
         components: {Ladle},
         data() {
             return {
                 currentLadle: null,
-                ladles: [],
             }
         },
         methods: {
+            ...mapActions([
+                'logout',
+                "updateLadles"
+            ]),
             chooseLadle(id) {
                 this.currentLadle = this.ladles[id];
             },
         },
+        computed: {
+            ...mapGetters([
+                "ladles",
+            ]),
+        },
         mounted() {
-            HTTP.get('/bd/laddle').then(response => {
-                this.ladles = response.data.result;
-            })
+            this.updateLadles()
         }
     }
 </script>

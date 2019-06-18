@@ -5,7 +5,7 @@
                 <span class="mr-2">Main</span>
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn @click="$store.dispatch('clearTokens').then(() => $router.push({name: 'login'}))" color="secondary">
+            <v-btn @click="logout().then(() => $router.push({name: 'login'}))" color="secondary">
                 <span class="mr-2">LOG OUT</span>
             </v-btn>
         </v-toolbar>
@@ -41,6 +41,7 @@
     import ZoneTable from './tables/zone/ZoneTable'
     import RefractoryTable from './tables/refractory/RefractoryTable'
     import PropertyTable from './tables/property/PropertyTable'
+    import {mapActions} from 'vuex';
 
     export default {
         name: 'Panel',
@@ -86,6 +87,9 @@
             }
         },
         methods: {
+            ...mapActions([
+                'logout',
+            ]),
             setCurrentTable(tableName) {
                 this.drawer = !this.drawer;
                 this.currentTableName = tableName;

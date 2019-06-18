@@ -25,7 +25,12 @@
                                     label="Название"
                             ></v-text-field>
                         </v-flex>
-
+                        <v-flex xs6>
+                            <v-text-field
+                                    label="Характеристика"
+                                    v-model="value.characteristic"
+                            ></v-text-field>
+                        </v-flex>
 
                     </v-layout>
                 </v-container>

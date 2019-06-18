@@ -29,14 +29,19 @@ export default {
             })
         },
         editLadle({dispatch}, ladle) {
-            return HTTP.put('/bd/ladles', ladle).then(() => {
+            // const saveLadle = {
+            //     id: ladle.id,
+            //     name: ladle.name,
+            //     photo: ladle.photo,
+            // };
+            HTTP.put(`/bd/ladles`, ladle).then(() => {
                 dispatch('updateLadles')
             })
         },
         deleteLadle({dispatch}, ladle) {
-          return HTTP.delete(`/bd/ladles/${ladle.id}`).then(() => {
-              dispatch('updateLadles')
-          })
+            return HTTP.delete(`/bd/ladles/${ladle.id}`).then(() => {
+                dispatch('updateLadles')
+            })
         },
     },
     getters: {

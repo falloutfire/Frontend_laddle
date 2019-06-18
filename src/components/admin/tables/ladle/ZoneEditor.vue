@@ -53,93 +53,54 @@
                                 @input="handleZoneNameInput(zoneIndex, $event)"
                         ></v-text-field>
                     </template>
-                    <v-card v-if="zone.points.length > 0">
-                        <v-list dense two-line>
-                            <template v-for="(point, pointIndex) in zone.points">
-                                <v-list-tile
-                                        :key="pointIndex"
-                                        avatar
-                                >
-                                    <v-list-tile-content>
-                                        <v-layout row wrap>
-                                            <v-flex xs5>
-                                                <v-text-field
-                                                        :value="point.x"
-                                                        label="x"
-                                                        @input="handlePointInput('x', zoneIndex, pointIndex, $event)"
-                                                ></v-text-field>
-                                            </v-flex>
-                                            <v-flex xs5>
-                                                <v-text-field
-                                                        :value="point.y"
-                                                        label="y"
-                                                        @input="handlePointInput('y', zoneIndex, pointIndex, $event)"
-                                                ></v-text-field>
-                                            </v-flex>
-                                            <v-flex xs2>
-                                                <v-btn
-                                                        icon
-                                                        @click="handleDeletePoint(zoneIndex, pointIndex)"
-                                                >
-                                                    <v-icon color="primary">delete</v-icon>
-                                                </v-btn>
-                                            </v-flex>
-                                        </v-layout>
-                                    </v-list-tile-content>
-                                </v-list-tile>
+                    <v-expansion-panel v-if="zone.points.length > 0">
+                        <v-expansion-panel-content
+                        >
+                            <template v-slot:actions>
+                                <v-icon color="primary">$vuetify.icons.expand</v-icon>
                             </template>
-                        </v-list>
-                    </v-card>
-                    <v-card>
-                        <v-card-title>Огнеупоры</v-card-title>
-                        <v-card-media>
-                            <template v-for="(refractory, refractoryIndex) in zone.refractories">
-                                <v-layout :key="refractoryIndex" row wrap>
-                                    <v-flex xs12>
-                                        <v-text-field
-                                                v-model="refractory.name"
-                                        ></v-text-field>
-                                    </v-flex>
-                                    <v-flex xs12>
-                                        <template v-for="(property, propertyIndex) in refractory.properties">
-                                            <v-card :key="propertyIndex">
-                                                <v-card-title>Свойства</v-card-title>
-                                                <v-card-media>
-                                                    <v-layout row wrap justify-center>
-                                                        <v-flex xs6>
-                                                            <v-text-field
-                                                                    v-model="property.name"
-                                                            ></v-text-field>
-                                                        </v-flex>
-                                                        <v-flex xs6>
-                                                            <v-text-field
-                                                                    v-model="property.value"
-                                                            ></v-text-field>
-                                                        </v-flex>
-                                                    </v-layout>
-                                                </v-card-media>
-                                            </v-card>
-                                        </template>
-                                    </v-flex>
-                                    <v-flex xs12>
-                                        <v-btn
-                                                block
-                                                color="primary"
-                                                :key="refractoryIndex"
-                                                @click="addProperty(zoneIndex, refractoryIndex)"
-                                        >Добавить свойство
-                                        </v-btn>
-                                    </v-flex>
-                                </v-layout>
+                            <template v-slot:header>
+                                <p>Точки</p>
                             </template>
-                            <v-btn
-                                    block
-                                    color="primary"
-                                    @click="addRefractory(zoneIndex)"
-                            >Добавить огнеупор
-                            </v-btn>
-                        </v-card-media>
-                    </v-card>
+                            <v-card>
+                                <v-list dense two-line>
+                                    <template v-for="(point, pointIndex) in zone.points">
+                                        <v-list-tile
+                                                :key="pointIndex"
+                                                avatar
+                                        >
+                                            <v-list-tile-content>
+                                                <v-layout row wrap>
+                                                    <v-flex xs5>
+                                                        <v-text-field
+                                                                :value="point.x"
+                                                                label="x"
+                                                                @input="handlePointInput('x', zoneIndex, pointIndex, $event)"
+                                                        ></v-text-field>
+                                                    </v-flex>
+                                                    <v-flex xs5>
+                                                        <v-text-field
+                                                                :value="point.y"
+                                                                label="y"
+                                                                @input="handlePointInput('y', zoneIndex, pointIndex, $event)"
+                                                        ></v-text-field>
+                                                    </v-flex>
+                                                    <v-flex xs2>
+                                                        <v-btn
+                                                                icon
+                                                                @click="handleDeletePoint(zoneIndex, pointIndex)"
+                                                        >
+                                                            <v-icon color="primary">delete</v-icon>
+                                                        </v-btn>
+                                                    </v-flex>
+                                                </v-layout>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                    </template>
+                                </v-list>
+                            </v-card>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </v-flex>
@@ -148,7 +109,7 @@
 </template>
 
 <script>
-
+    import {mapActions, mapGetters} from 'vuex';
     import lodash from 'lodash';
 
     const newZoneDefault = {
@@ -187,35 +148,19 @@
             }
         },
         methods: {
-            addProperty(zoneIndex, refractoryIndex) {
-                if (this.currentZone && zoneIndex + 1 === this.zones.length) {
-                    this.currentZone.refractories[refractoryIndex].properties.push({
-                        name: "",
-                        value: "",
-                        type: ""
-                    })
-                } else {
-                    this.currentZones[zoneIndex].refractories[refractoryIndex].properties.push({
-                        name: "",
-                        value: "",
-                        type: ""
-                    })
-                }
-            },
-            addRefractory(zoneIndex) {
-                console.log(zoneIndex);
-                if (this.currentZone && zoneIndex + 1 === this.zones.length) {
-                    this.currentZone.refractories.push({
-                        name: "",
-                        properties: [],
-                    })
-                } else {
-                    this.currentZones[zoneIndex].refractories.push({
-                        name: "",
-                        properties: [],
-                    })
-                }
-            },
+            ...mapActions([
+                'updateRefractories',
+                'updateProperties',
+                "deleteZone",
+                "editZone",
+                "saveZone",
+                "saveRefractory",
+                "editRefractory",
+                "deleteRefractory",
+                "saveProperty",
+                "editProperty",
+                "deleteProperty",
+            ]),
             drawZones(x = -1, y = -1, clicked = false) {
                 const ctx = this.canvas.getContext('2d');
                 ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -257,7 +202,14 @@
             saveCurrentZone() {
                 this.canvas.removeEventListener('mousedown', this.addPointEventListener);
                 this.currentZones.push(lodash.cloneDeep(this.currentZone));
-                this.changes.push({changeType: 'addZone', value: lodash.cloneDeep(this.currentZone)})
+                const zoneToAdd = {
+                    name: this.currentZone.name,
+                    laddle: {
+                        id: this.value.id
+                    },
+                    index: this.currentZones.length - 1,
+                };
+                this.changes.push({changeType: 'saveZone', value: zoneToAdd});
                 this.currentZone = null;
             },
             removeCurrentZone() {
@@ -273,19 +225,38 @@
                 //changeZoneName
                 //addZone
                 this.changes.forEach(({changeType, value}) => {
-                    switch (changeType) {
-                        case 'deleteZone': {
-                            this.$emit('deleteZone', value);
-                            break;
-                        }
-                        case 'addZone': {
-                            break;
-                        }
-                        case 'editPoint': {
-                            this.$emit('editPoint', value);
-                            break;
-                        }
-                    }
+                    //this[changeType](value);
+                    // switch (changeType) {
+                    //     case 'deleteZone': {
+                    //         this.deleteZone(value);
+                    //         break;
+                    //     }
+                    //     case 'addZone': {
+                    //         this.saveZone(value);
+                    //         break;
+                    //     }
+                    //     case 'editZone': {
+                    //         this.editZone(value);
+                    //         break
+                    //     }
+                    //     case 'deleteZone': {
+                    //         this.deleteZone(value);
+                    //         break;
+                    //     }
+                    //     case 'addZone': {
+                    //         this.saveZone(value);
+                    //         break;
+                    //     }
+                    //     case 'editZone': {
+                    //         this.editZone(value);
+                    //         break
+                    //     }
+                    //
+                    //     case 'editPoint': {
+                    //         this.$emit('editPoint', value);
+                    //         break;
+                    //     }
+                    // }
                 });
                 this.changes.splice(0, this.changes.length);
                 const newValue = lodash.cloneDeep(this.value);
@@ -305,7 +276,7 @@
                 this.drawZones();
             },
             handleDeleteZone(zoneIndex) {
-                const deletedValue = this.currentZones.splice(zoneIndex, 1);
+                const [deletedValue] = this.currentZones.splice(zoneIndex, 1);
                 this.changes.push({changeType: 'deleteZone', value: deletedValue});
                 this.drawZones();
             },
@@ -323,7 +294,15 @@
                     this.currentZone.name = value
                 } else {
                     this.currentZones[zoneIndex].name = value;
-                    this.changes.push({changeType: 'changeZoneName', value: this.currentZones[zoneIndex]});
+                    if (this.currentZones[zoneIndex].id) {
+                        this.changes.push({changeType: 'editZone', value: this.currentZones[zoneIndex]});
+                    } else {
+                        this.changes.filter(change => {
+                            return change.changeType === 'addZone'
+                        }).find(change => {
+                            return change.value.index === zoneIndex
+                        }).value.name = value
+                    }
                 }
                 this.drawZones();
             },

@@ -67,6 +67,7 @@
                 <template v-slot:items="props">
                     <td>{{ props.item.id }}</td>
                     <td>{{ props.item.name }}</td>
+                    <td>{{ props.item.characteristic }}</td>
                     <td>{{ props.item.zone ? props.item.zone.id : ""}}</td>
                     <td class="justify-center layout px-0">
                         <v-icon
@@ -97,6 +98,7 @@
     const refractoryDefault = {
         id: "",
         name: "",
+        characteristic: "",
         zone: {
             id: "",
             name: "",
@@ -112,6 +114,7 @@
                 headers: [
                     {text: 'Огнеупор id', value: 'id'},
                     {text: 'Название', value: 'name'},
+                    {text: 'Характеристика', value: 'characteristic'},
                     {text: 'Зона id', value: 'zone.id'},
                 ],
 

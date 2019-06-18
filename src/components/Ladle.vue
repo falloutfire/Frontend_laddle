@@ -22,20 +22,46 @@
                     </v-btn>
                     <v-toolbar-title>Огнеупорные материалы для {{zoneName}}</v-toolbar-title>
                 </v-toolbar>
-                <v-data-table
-                        expand
-                        :headers="headers"
-                        :items="currentZone ? currentZone.refractories : []"
-                        hide-actions
-                        class="elevation-1"
-                >
-                    <template slot="items" slot-scope="props">
-                        <td>{{ props.item.name }}</td>
-                        <template v-for="prop in Object.values(props.item.properties)">
-                            <td :key="prop.id"><p style="word-break: break-all">{{ prop.value }}</p></td>
-                        </template>
-                    </template>
-                </v-data-table>
+                <v-card-media>
+                    <v-container fluid grid-list-md>
+                        <v-data-iterator
+                                :items="currentZone ? currentZone.refractories : []"
+                                row
+                                wrap
+                                content-tag="v-layout"
+                        >
+                            <template v-slot:item="props">
+                                <v-flex
+                                        xs12
+                                        sm6
+                                        md4
+                                        lg3
+                                >
+                                    <v-card>
+                                        <v-card-title><h4>{{ props.item.name }}</h4></v-card-title>
+                                        <v-divider></v-divider>
+                                        <v-list dense>
+                                            <v-list-tile
+                                                    v-for="(prop, index) in Object.values(props.item.properties)"
+                                                    :key="index"
+                                            >
+                                                <v-list-tile-content>{{ prop.name }}:</v-list-tile-content>
+                                                <v-list-tile-content>{{ prop.value }} ({{ prop.type }})
+                                                </v-list-tile-content>
+                                            </v-list-tile>
+                                            <v-list-tile
+                                            >
+                                                <v-list-tile-content>Характеристика:</v-list-tile-content>
+                                                <v-list-tile-content>{{ props.item.characteristic }}
+                                                </v-list-tile-content>
+                                            </v-list-tile>
+                                        </v-list>
+                                    </v-card>
+                                </v-flex>
+                            </template>
+                        </v-data-iterator>
+                    </v-container>
+                </v-card-media>
             </v-card>
         </v-dialog>
     </v-layout>
@@ -74,20 +100,8 @@
             },
         },
         computed: {
-            headers() {
-                if (this.currentZone) {
-                    const propertiesHeader = this.currentZone.refractories[0].properties.map(el => {
-                        return {
-                            text: el.name, value: el.name
-                        }
-                    });
-                    return [{text: 'name', value: 'name'}].concat(propertiesHeader)
-                } else {
-                    return []
-                }
-            },
             zoneName() {
-                if(this.currentZone) {
+                if (this.currentZone) {
                     return this.currentZone.name
                 }
                 return ""
