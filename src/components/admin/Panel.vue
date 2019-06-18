@@ -37,12 +37,20 @@
 <script>
     import UserTable from './tables/user/UserTable';
     import ShopTable from './tables/shop/ShopTable';
+    import LadleTable from './tables/ladle/LadleTable';
+    import ZoneTable from './tables/zone/ZoneTable'
+    import RefractoryTable from './tables/refractory/RefractoryTable'
+    import PropertyTable from './tables/property/PropertyTable'
 
     export default {
         name: 'Panel',
         components: {
             UserTable,
             ShopTable,
+            LadleTable,
+            ZoneTable,
+            RefractoryTable,
+            PropertyTable,
         },
         data() {
             return {
@@ -59,19 +67,19 @@
                     },
                     {
                         title: 'Ladles',
-                        table: 'LadlesTypesTable',
+                        table: 'LadleTable',
                     },
                     {
                         title: 'Zones',
-                        table: 'ZonesTable',
+                        table: 'ZoneTable',
                     },
                     {
                         title: 'Refractories',
-                        table: 'RefractoriesTable',
+                        table: 'RefractoryTable',
                     },
                     {
                         title: 'Properties',
-                        table: 'PropertiesTable',
+                        table: 'PropertyTable',
                     },
 
                 ],

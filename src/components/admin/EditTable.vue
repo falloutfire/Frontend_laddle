@@ -97,7 +97,7 @@
 <script>
     import HTTP from "@/http";
     import lodash from 'lodash';
-    import ZoneEditor from "./ZoneEditor";
+    import ZoneEditor from "./tables/ladle/ZoneEditor";
 
     export default {
         name: "EditTable",
