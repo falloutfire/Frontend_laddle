@@ -2,7 +2,7 @@
     <v-layout row wrap>
         <v-flex xs12 class="mt-3" style="border: 1px solid gray">
             <v-toolbar flat color="white">
-                <v-toolbar-title>Refractory</v-toolbar-title>
+                <v-toolbar-title>Огнеупоры</v-toolbar-title>
                 <v-divider
                         class="mx-2"
                         inset
@@ -14,7 +14,7 @@
                                   label="Фильтр по имени пользователя" clearable></v-text-field>
                 </v-flex>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" dark class="mb-2" @click="openCreateRefractoryDialog">Новый цех</v-btn>
+                <v-btn color="primary" dark class="mb-2" @click="openCreateRefractoryDialog">Новый огнеупор</v-btn>
                 <v-dialog v-model="deleteDialog" max-width="500px">
                     <v-card>
                         <v-card-title>
@@ -67,7 +67,7 @@
                 <template v-slot:items="props">
                     <td>{{ props.item.id }}</td>
                     <td>{{ props.item.name }}</td>
-                    <td>{{ props.item.zone.id }}</td>
+                    <td>{{ props.item.zone ? props.item.zone.id : ""}}</td>
                     <td class="justify-center layout px-0">
                         <v-icon
                                 small

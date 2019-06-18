@@ -66,7 +66,7 @@
             >
                 <template v-slot:items="props">
                     <td>{{ props.item.id }}</td>
-                    <td>{{ props.item.shop.id }}</td>
+                    <td>{{ props.item.shop ?  props.item.shop.id : ""}}</td>
                     <td>{{ props.item.login }}</td>
                     <td>{{ props.item.firstName }}</td>
                     <td>{{ props.item.secondName }}</td>

@@ -18,7 +18,7 @@
                             <v-text-field
                                     v-model="value.employeesNumber"
                                     type="number"
-                                    label="Количнство сотрудников"
+                                    label="Количество сотрудников"
                             ></v-text-field>
                         </v-flex>
 

@@ -69,7 +69,7 @@
                     <td>{{ props.item.name }}</td>
                     <td>{{ props.item.value }}</td>
                     <td>{{ props.item.type }}</td>
-                    <td>{{ props.item.refractory.id }}</td>
+                    <td>{{ props.item.refractory ? props.item.refractory.id : "" }}</td>
                     <td class="justify-center layout px-0">
                         <v-icon
                                 small
