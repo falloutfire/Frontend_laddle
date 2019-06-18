@@ -91,8 +91,5 @@
                 this.currentTableName = tableName;
             }
         },
-        mounted() {
-
-        },
     }
 </script>
