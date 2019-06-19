@@ -80,7 +80,6 @@
                 const rect = this.canvas.getBoundingClientRect();
 
                 this.canvas.addEventListener('mousemove', (e) => {
-                    console.log(e);
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
                     this.drawZones(x, y);

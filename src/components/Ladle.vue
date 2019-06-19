@@ -25,7 +25,7 @@
                 <v-card-media>
                     <v-container fluid grid-list-md>
                         <v-data-iterator
-                                :items="currentZone ? currentZone.refractories : []"
+                                :items="filteredItems"
                                 row
                                 wrap
                                 content-tag="v-layout"
@@ -62,6 +62,26 @@
                         </v-data-iterator>
                     </v-container>
                 </v-card-media>
+                <v-layout row wrap justify-center>
+                    <v-flex xs6>
+                        <v-layout row wrap>
+                            <v-flex xs5 class="mx-1">
+                                <v-select
+                                        :items="propertiesToFilter"
+                                        label="Свойство для фильтра"
+                                        v-model="propertyToFilter"
+                                ></v-select>
+                            </v-flex>
+                            <v-flex xs5>
+                                <v-text-field
+                                        label="Значение для фильтра"
+                                        v-model="valueToFilter"
+                                ></v-text-field>
+                            </v-flex>
+                        </v-layout>
+                    </v-flex>
+                </v-layout>
+
             </v-card>
         </v-dialog>
     </v-layout>
@@ -89,6 +109,8 @@
         },
         data() {
             return {
+                valueToFilter: "",
+                propertyToFilter: "",
                 dialog: false,
                 currentZone: null,
             }
@@ -100,6 +122,34 @@
             },
         },
         computed: {
+            propertiesToFilter() {
+                return this.currentZone ? this.currentZone.refractories.reduce((acc, el) => acc.concat(el.properties), []).map(el => el.name) : []
+            },
+            filteredItems() {
+                if (!this.currentZone) {
+                    return []
+                }
+                if (this.propertyToFilter && this.valueToFilter) {
+                    if (this.valueToFilter.indexOf('>') === 0) {
+                        return this.currentZone.refractories.filter(el => {
+                            const prop = el.properties.find(prop => prop.name === this.propertyToFilter);
+                            return prop && parseFloat(prop.value) > parseFloat(this.valueToFilter.substring(1))
+                        })
+                    } else if (this.valueToFilter.indexOf('<') === 0) {
+                        return this.currentZone.refractories.filter(el => {
+                            const prop = el.properties.find(prop => prop.name === this.propertyToFilter);
+                            console.log(prop && prop.value);
+                            return prop && parseFloat(prop.value) < parseFloat(this.valueToFilter.substring(1))
+                        })
+                    } else {
+                        return this.currentZone.refractories.filter(el => {
+                            const prop = el.properties.find(prop => prop.name === this.propertyToFilter);
+                            return prop && parseFloat(prop.value)  ===  parseFloat(this.valueToFilter)
+                        })
+                    }
+                }
+                return this.currentZone.refractories;
+            },
             zoneName() {
                 if (this.currentZone) {
                     return this.currentZone.name
