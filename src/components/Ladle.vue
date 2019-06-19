@@ -138,7 +138,6 @@
                     } else if (this.valueToFilter.indexOf('<') === 0) {
                         return this.currentZone.refractories.filter(el => {
                             const prop = el.properties.find(prop => prop.name === this.propertyToFilter);
-                            console.log(prop && prop.value);
                             return prop && parseFloat(prop.value) < parseFloat(this.valueToFilter.substring(1))
                         })
                     } else {
