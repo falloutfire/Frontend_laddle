@@ -2,7 +2,7 @@
     <v-layout row wrap>
         <v-flex xs12 class="mt-3" style="border: 1px solid gray">
             <v-toolbar flat color="white">
-                <v-toolbar-title>User</v-toolbar-title>
+                <v-toolbar-title>Пользователь</v-toolbar-title>
                 <v-divider
                         class="mx-2"
                         inset

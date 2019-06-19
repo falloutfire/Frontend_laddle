@@ -2,7 +2,7 @@
     <v-dialog v-model="isOpen" max-width="500px" persistent lazy>
         <v-card>
             <v-card-title>
-                <span class="headline mt-2 ml-2"> Зона </span>
+                <span class="headline mt-2 ml-2"> Свойство </span>
             </v-card-title>
 
             <v-card-text>

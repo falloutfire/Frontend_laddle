@@ -10,7 +10,7 @@
             </v-btn>
         </v-toolbar>
         <v-navigation-drawer
-                class="deep-purple accent-4"
+                class="primary"
                 dark
                 clipped
                 permanent

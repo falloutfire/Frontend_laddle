@@ -87,6 +87,7 @@
                                 <v-select
                                         :items="propertiesToFilter"
                                         label="Свойство для фильтра"
+                                        clearable
                                         v-model="propertyToFilter"
                                 ></v-select>
                             </v-flex>

@@ -67,31 +67,34 @@
                     }
                 })
             },
+            init() {
+                this.ladlePhoto.onload = () => {
+                    this.canvas.width = this.ladlePhoto.width;
+                    this.canvas.height = this.ladlePhoto.height;
+                    const rect = this.canvas.getBoundingClientRect();
+
+                    this.canvas.addEventListener('mousemove', (e) => {
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        this.drawZones(x, y);
+                    });
+
+                    this.canvas.addEventListener('mouseup', (e) => {
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        this.drawZones(x, y, true);
+                    });
+                    this.drawZones();
+                };
+            },
         },
         mounted() {
             const layout = document.getElementById('layout');
             this.layout.height = layout.clientHeight;
             this.layout.width = layout.clientWidth;
             this.canvas = document.getElementById('canvas');
+            this.init();
             //const debouncedDrawZones = lodash.debounce(this.drawZones, .750);
-            this.ladlePhoto.onload = () => {
-                this.canvas.width = this.ladlePhoto.width;
-                this.canvas.height = this.ladlePhoto.height;
-                const rect = this.canvas.getBoundingClientRect();
-
-                this.canvas.addEventListener('mousemove', (e) => {
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    this.drawZones(x, y);
-                });
-
-                this.canvas.addEventListener('mouseup', (e) => {
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    this.drawZones(x, y, true);
-                });
-                this.drawZones();
-            };
         },
         computed: {
             ladlePhoto() {
@@ -100,6 +103,11 @@
                 return image;
             },
         },
+        watch: {
+            ladlePhoto() {
+                this.init();
+            },
+        }
     }
 </script>
 
