@@ -37,7 +37,7 @@
             drawZones(x = -1, y = -1, clicked = false) {
                 const ctx = this.canvas.getContext('2d');
                 ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                ctx.drawImage(this.ladlePhoto, 0, 0);
+                ctx.drawImage(this.ladlePhoto, 0, 0, this.ladlePhoto.width, this.ladlePhoto.height);
                 this.zones.forEach(zone => {
                     const points = zone.points.slice();
                     const [firstPoint] = points.slice(0, 1);
