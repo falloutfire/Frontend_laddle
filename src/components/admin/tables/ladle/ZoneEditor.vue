@@ -313,18 +313,23 @@
             this.photo.onload = () => {
                 this.canvas.width = this.photo.width;
                 this.canvas.height = this.photo.height;
-                const rect = this.canvas.getBoundingClientRect();
 
                 this.canvas.addEventListener('mousemove', (e) => {
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
+                    const rect = this.canvas.getBoundingClientRect();
+                    const scaleX = this.canvas.width / rect.width;
+                    const scaleY = this.canvas.height / rect.height;
+                    const x = (e.clientX - rect.left) * scaleX;
+                    const y = (e.clientY - rect.top) * scaleY;
                     this.drawZones(x, y);
                 });
 
 
                 this.canvas.addEventListener('mouseup', (e) => {
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
+                    const rect = this.canvas.getBoundingClientRect();
+                    const scaleX = this.canvas.width / rect.width;
+                    const scaleY = this.canvas.height / rect.height;
+                    const x = (e.clientX - rect.left) * scaleX;
+                    const y = (e.clientY - rect.top) * scaleY;
                     this.drawZones(x, y, true);
                 });
                 this.drawZones();
