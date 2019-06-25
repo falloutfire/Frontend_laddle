@@ -1,11 +1,42 @@
 <template>
     <v-layout row wrap>
-        <v-flex xs12>
+        <v-flex xs10>
             <photo-holder
                     :zones="zones"
                     :photo="photo"
                     @zone-clicked="zoneClicked"
             ></photo-holder>
+        </v-flex>
+        <v-flex xs2>
+            <v-container fluid>
+                <v-layout fill-height>
+                    <v-flex xs12>
+                        <v-card>
+                            <v-card-title>
+                                <v-layout row wrap justify-center>
+                                    <h2>Зоны</h2>
+
+                                </v-layout>
+                            </v-card-title>
+                            <v-card-media>
+                                <v-list two-line>
+                                    <template v-for="(zone, index) in zones">
+                                        <v-list-tile
+                                                :key="index"
+                                                @click="zoneClicked(zone)"
+                                        >
+
+                                            <v-list-tile-content>
+                                                <p>{{zone.name}}</p>
+                                            </v-list-tile-content>
+                                        </v-list-tile>
+                                    </template>
+                                </v-list>
+                            </v-card-media>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
         </v-flex>
         <v-dialog
                 persistent
@@ -22,6 +53,26 @@
                     </v-btn>
                     <v-toolbar-title>Огнеупорные материалы для {{zoneName}}</v-toolbar-title>
                 </v-toolbar>
+                <v-layout row wrap justify-center class="my-3">
+                    <v-flex xs6>
+                        <v-layout row wrap>
+                            <v-flex xs5 class="mx-1">
+                                <v-select
+                                        :items="propertiesToFilter"
+                                        label="Свойство для фильтра"
+                                        clearable
+                                        v-model="propertyToFilter"
+                                ></v-select>
+                            </v-flex>
+                            <v-flex xs5>
+                                <v-text-field
+                                        label="Значение для фильтра"
+                                        v-model="valueToFilter"
+                                ></v-text-field>
+                            </v-flex>
+                        </v-layout>
+                    </v-flex>
+                </v-layout>
                 <v-card-media>
                     <v-container fluid grid-list-lg>
                         <v-data-iterator
@@ -51,26 +102,19 @@
                                                     </v-list-tile-content>
                                                 </v-layout>
                                             </v-list-tile>
-                                            <v-layout row wrap align-center justify-center fill-height>
-                                                <v-flex xs3>
-                                                    <v-list-tile
+                                            <v-layout justify-center row class="mx-0">
+                                                <v-flex xs12>
+                                                <v-expansion-panel>
+                                                    <v-expansion-panel-content
                                                     >
-                                                        <v-list-tile-content>
-                                                            <p>
-                                                                Хар-ка </p>
-                                                        </v-list-tile-content>
-                                                    </v-list-tile>
-                                                </v-flex>
-                                                <v-flex xs9>
-                                                    <v-layout row wrap align-center justify-center fill-height>
-                                                        <v-list-tile
-                                                        >
-                                                            <v-list-tile-content>
-                                                                <p style="word-break: break-all;overflow-y: auto;">
-                                                                    {{ props.item.characteristic }}</p>
-                                                            </v-list-tile-content>
-                                                        </v-list-tile>
-                                                    </v-layout>
+                                                        <template v-slot:header>
+                                                            <div>Характеристика</div>
+                                                        </template>
+                                                        <v-card>
+                                                            <v-card-text style="word-break: break-all;overflow-y: auto;"> 123333333333333333333333333333333333333333333333123333333333333333333333333333333333333333333333123333333333333333333333333333333333333333333333123333333333333333333333333333333333333333333333123333333333333333333333333333333333333333333333123333333333333333333333333333333333333333333333123333333333333333333333333333333333333333333333123333333333333333333333333333333333333333333333123333333333333333333333333333333333333333333333123333333333333333333333333333333333333333333333123333333333333333333333333333333333333333333333123333333333333333333333333333333333333333333333123333333333333333333333333333333333333333333333 </v-card-text>
+                                                        </v-card>
+                                                    </v-expansion-panel-content>
+                                                </v-expansion-panel>
                                                 </v-flex>
                                             </v-layout>
                                         </v-list>
@@ -80,27 +124,6 @@
                         </v-data-iterator>
                     </v-container>
                 </v-card-media>
-                <v-layout row wrap justify-center>
-                    <v-flex xs6>
-                        <v-layout row wrap>
-                            <v-flex xs5 class="mx-1">
-                                <v-select
-                                        :items="propertiesToFilter"
-                                        label="Свойство для фильтра"
-                                        clearable
-                                        v-model="propertyToFilter"
-                                ></v-select>
-                            </v-flex>
-                            <v-flex xs5>
-                                <v-text-field
-                                        label="Значение для фильтра"
-                                        v-model="valueToFilter"
-                                ></v-text-field>
-                            </v-flex>
-                        </v-layout>
-                    </v-flex>
-                </v-layout>
-
             </v-card>
         </v-dialog>
     </v-layout>

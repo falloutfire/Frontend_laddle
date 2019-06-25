@@ -1,12 +1,12 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <v-layout fill-height>
         <v-toolbar app>
-            <v-btn v-if="$store.getters.isAdmin" color="secondary" :to="{name: 'admin'}">
-                <span class="mr-2">Admin Panel</span>
-            </v-btn>
             <v-spacer></v-spacer>
+            <v-btn v-if="$store.getters.isAdmin" color="secondary" :to="{name: 'admin'}">
+                <span class="mr-2">Панель администратора</span>
+            </v-btn>
             <v-btn @click="logout().then(() => $router.push({name: 'login'}))" color="secondary">
-                <span class="mr-2">LOG OUT</span>
+                <span class="mr-2">Выход</span>
             </v-btn>
         </v-toolbar>
         <v-navigation-drawer
@@ -46,7 +46,9 @@
                 </div>
             </template>
         </v-navigation-drawer>
-        <ladle v-if="currentLadle"  v-bind="currentLadle"></ladle>
+        <v-flex xs12>
+            <ladle v-if="currentLadle" v-bind="currentLadle"></ladle>
+        </v-flex>
     </v-layout>
 </template>
 

@@ -69,7 +69,7 @@
                     <td>{{ props.item.name }}</td>
                     <td>{{ props.item.value }}</td>
                     <td>{{ props.item.type }}</td>
-                    <td>{{ props.item.refractory ? props.item.refractory.id : "" }}</td>
+                    <td>{{ props.item.refractory ? props.item.refractory.name : "" }}</td>
                     <td class="justify-center layout px-0">
                         <v-icon
                                 small
@@ -118,7 +118,7 @@
                     {text: 'Название свойства', value: 'name'},
                     {text: 'Значение', value: 'value'},
                     {text: 'Единица измерения', value: 'type'},
-                    {text: 'Огнеупор id', value: 'refractory.id'},
+                    {text: 'Название огнеупора', value: 'refractory.name'},
                 ],
 
                 currentPropertyToCreate: lodash.cloneDeep(propertyDefault),

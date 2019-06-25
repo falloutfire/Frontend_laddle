@@ -1,12 +1,12 @@
 <template>
     <v-layout row wrap>
         <v-toolbar app>
-            <v-btn  color="secondary" :to="{name: 'main'}">
-                <span class="mr-2">Main</span>
-            </v-btn>
             <v-spacer></v-spacer>
+            <v-btn  color="secondary" :to="{name: 'main'}">
+                <span class="mr-2">Основная панель</span>
+            </v-btn>
             <v-btn @click="logout().then(() => $router.push({name: 'login'}))" color="secondary">
-                <span class="mr-2">LOG OUT</span>
+                <span class="mr-2">Выход</span>
             </v-btn>
         </v-toolbar>
         <v-navigation-drawer v-model="drawer"
@@ -18,6 +18,14 @@
                              width="350">
             <v-divider></v-divider>
             <v-list dense class="pt-0">
+                <v-list-tile>
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            <p class="text-md-center">Таблицы</p>
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+                <v-divider></v-divider>
                 <v-list-tile v-for="item in items"
                              :key="item.title"
                              @click="setCurrentTable(item.table)">
@@ -59,27 +67,27 @@
                 currentTableName: null,
                 items: [
                     {
-                        title: 'Users',
+                        title: 'Пользователи',
                         table: 'UserTable',
                     },
                     {
-                        title: 'Shops',
+                        title: 'Цехи',
                         table: 'ShopTable',
                     },
                     {
-                        title: 'Ladles',
+                        title: 'Ковши',
                         table: 'LadleTable',
                     },
                     {
-                        title: 'Zones',
+                        title: 'Зоны',
                         table: 'ZoneTable',
                     },
                     {
-                        title: 'Refractories',
+                        title: 'Огнеупоры',
                         table: 'RefractoryTable',
                     },
                     {
-                        title: 'Properties',
+                        title: 'Свойства',
                         table: 'PropertyTable',
                     },
 
