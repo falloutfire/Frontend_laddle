@@ -1,5 +1,5 @@
 <template>
-    <v-layout id="layout" fill-height>
+    <v-layout id="layout">
         <canvas id="canvas">
         </canvas>
     </v-layout>
@@ -71,6 +71,7 @@
                 this.ladlePhoto.onload = () => {
                     this.canvas.width = this.ladlePhoto.width;
                     this.canvas.height = this.ladlePhoto.height;
+                    console.log(this.ladlePhoto.height);
 
                     this.canvas.addEventListener('mousemove', (e) => {
                         const rect = this.canvas.getBoundingClientRect();
